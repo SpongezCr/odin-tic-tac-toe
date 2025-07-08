@@ -1,0 +1,26 @@
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.row {
+    display: flex; 
+    gap: 5px;
+}
+
+.box {
+    height: 100px;
+    width: 100px;
+    border: 2px solid black;
+}
