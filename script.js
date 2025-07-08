@@ -4,11 +4,12 @@
 const ticTacToeGame = (() => {
     let board;
     let curPlayer;
-    let curRound = 1;
+    let curRound;
 
     const container = document.querySelector(".container");
     const gameEnd = document.querySelector(".game-end")
     const gameEndEvent = new Event("gameEnd");
+    const restartButton = document.querySelector("#restart");
 
     const placeMarker = (loc) => {
         let row = Math.floor(loc/3);
@@ -47,7 +48,10 @@ const ticTacToeGame = (() => {
         board = [];
         for (let i = 0; i < 3; i++) 
             board[i] = new Array(3).fill(null)
+        const boxes = Array.from(container.querySelectorAll(".box"));
+        boxes.forEach((item) => item.textContent = "");
         curPlayer = 'O';
+        curRound = 1;
         gameEnd.classList.add('hidden');
     }
 
@@ -81,8 +85,9 @@ const ticTacToeGame = (() => {
         });
 
     }
+    restartButton.addEventListener('click', playGame);
 
-    return {playGame}
+    return {playGame};
 })();
 
 ticTacToeGame.playGame();
