@@ -4,17 +4,18 @@
 const ticTacToeGame = (() => {
     let board;
     let curPlayer;
+    let curRound = 1;
 
-    const initializeGame = () => {
-        board = [];
-        for (let i = 0; i < 3; i++) 
-            board[i] = new Array(3).fill(null)
-        curPlayer = 'O';
-    }
+    const container = document.querySelector(".container");
+    const gameEnd = document.querySelector(".game-end")
+    const gameEndEvent = new Event("gameEnd");
 
-    const placeMarker = () => {
-        let loc = (+prompt("where to put your marker?")) - 1;
-        board[Math.floor(loc/3)][loc%3] = curPlayer;
+    const placeMarker = (loc) => {
+        let row = Math.floor(loc/3);
+        let col = loc%3;
+        let originalMarker = board[row][col];
+        board[row][col] ??= curPlayer;
+        return originalMarker;
     };
 
     const checkWin = () => {
@@ -42,19 +43,44 @@ const ticTacToeGame = (() => {
         return checkWinRow() || checkWinCol() || checkWinDiag();
     };
 
-    const playGame = () => {
-        initializeGame();
-        for (let i = 0; i < 9; i++) {
-            placeMarker();
-            console.log(board);
+    const initializeGame = () => {
+        board = [];
+        for (let i = 0; i < 3; i++) 
+            board[i] = new Array(3).fill(null)
+        curPlayer = 'O';
+        gameEnd.classList.add('hidden');
+    }
+
+    const handleClick = (event) => {
+        if (Number.isInteger(+(event.target.id)) && event.target.id !== "") {
+            if (placeMarker(+event.target.id - 1)) return;
+            event.target.textContent = curPlayer;
             if (checkWin()) {
-                console.log(`Player ${curPlayer == 'O'? 1 : 2} wins!`);
+                gameEnd.textContent = `Player ${curPlayer == 'O'? 1 : 2} wins!`
+                container.dispatchEvent(gameEndEvent);
                 return;
             }
+            if (curRound == 9) {
+                gameEnd.textContent = "It's a tie!";
+                container.dispatchEvent(gameEndEvent);
+            }
+            curRound++;
             curPlayer = curPlayer === 'O' ? 'X' : 'O';
         }
-        console.log("It's a tie!");
-    };
+    }
+
+    const playGame = () => {
+
+        initializeGame();
+
+        container.addEventListener('click', handleClick);
+
+        container.addEventListener('gameEnd', () => {
+            container.removeEventListener('click', handleClick);
+            gameEnd.classList.remove('hidden');
+        });
+
+    }
 
     return {playGame}
 })();

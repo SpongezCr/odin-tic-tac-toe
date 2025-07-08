@@ -6,6 +6,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 90vh;
+    gap: 50px;
 }
 
 .container {
@@ -23,4 +24,12 @@ body {
     height: 100px;
     width: 100px;
     border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    visibility: hidden;
 }
